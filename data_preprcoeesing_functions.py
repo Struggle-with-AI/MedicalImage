@@ -38,19 +38,11 @@ def get_images_by_folder_id(folder_id):
     return matched_images
 
 def extract_folder_id(image_file_path: str) -> str:
-    """
-    Extracts the 3rd part from the image file path.
-
-    Example:
-    From 'Calc-Test.../UID1/UID2/000000.dcm' → returns 'UID2'
-
-    Parameters:
-        image_file_path (str): path from CSV
-
-    Returns:
-        str: the folder UID containing the JPEG images
-    """
     parts = image_file_path.split('/')
     if len(parts) >= 3:
         return parts[2]
     return None
+
+def merge_benign_label(df):
+    df['pathology'] = df['pathology'].replace('BENIGN_WITHOUT_CALLBACK', 'BENIGN')
+    return df
