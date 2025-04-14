@@ -46,3 +46,29 @@ def extract_folder_id(image_file_path: str) -> str:
 def merge_benign_label(df):
     df['pathology'] = df['pathology'].replace('BENIGN_WITHOUT_CALLBACK', 'BENIGN')
     return df
+
+def get_image_by_uid_and_filename(folder_uid, file_name, base_jpeg_path):
+    """
+    Given a folder UID and image filename, return the image as a PIL.Image.
+
+    Parameters:
+        folder_uid (str): The UID of the folder where the image is stored.
+        file_name (str): The exact image filename (e.g., '1-188.jpg').
+        base_jpeg_path (str): Path to the root jpeg directory.
+
+    Returns:
+        Tuple[str, PIL.Image] if found, else None
+    """
+    # Normalize filename
+    file_name = file_name.lower().strip()
+
+    # Build full image path
+    image_path = os.path.join(base_jpeg_path, folder_uid, file_name)
+
+    if not os.path.exists(image_path):
+        print(f"❌ Image not found: {image_path}")
+        return None
+
+    # Load and return the image
+    image = Image.open(image_path).convert("RGB")
+    return file_name, image
